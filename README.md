@@ -39,6 +39,6 @@ but I'm actively looking for more cost effective options.
 
 # Links
 
-Schematic [PDF](schematic.png)
+Schematic [PDF](schematic.pdf)
 
 ![PCB](pcb.png)
