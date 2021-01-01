@@ -33,9 +33,11 @@ this breakout board: https://www.aliexpress.com/item/32677142070.html
 main PCB.
 - 12v Step Up - to power accessories connected to the OBD-2 port, which 
 is a 12v source.  With Enable.  Designed with this one in mind: https://www.aliexpress.com/item/32902463323.html
-- OBD-2 FEMALE Right Angle Connector - hard to find.  One like this
+- OBD-2 FEMALE Right Angle Connector - hard to find.  Originnally looking at
+one like like this:
 https://www.macchina.cc/catalog/parts/obd2-female-right-angle-pth-connector
-but I'm actively looking for more cost effective options.
+but I found that http://www.med-obd.com/ has female right angle connectors
+of a slightly differnet pinout at a better value.
 
 # Links
 
