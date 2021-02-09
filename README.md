@@ -15,7 +15,8 @@ It is still under development.  Final design and source code to follow.
 
 # BOM
 
-- ESP32 - a Node32s or equivalent.
+- ESP32 - a Node32s or equivalent.  Make sure to get a 30-pin version that
+matches the PCB silkscreen.
 - MCP2515 - CAN Bus Transceiver Breakout Boards.  These are intended to mount
 to the top of the main PCB with the headers installed to the underside of
 the breakout board.
