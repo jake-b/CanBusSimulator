@@ -169,7 +169,7 @@ void setup() {
 
   // Turn on 12V supply
   pinMode(26, OUTPUT); 
-  digitalWrite(26, HIGH);
+  digitalWrite(26, HIGH);  
 
   // Setup encoder button
   pinMode(25, INPUT);
@@ -197,6 +197,9 @@ void setup() {
 int prevEncoder = 0;
 unsigned long count[3] = {0,0,0};
 unsigned long displayCount[3] = {0,0,0};
+unsigned long lastUserInteraction = 0;
+bool screenSaveActive = false;
+int x = random(128), y = random(64), dx = 1, dy = 1;
 
 void loop() {
 
@@ -222,6 +225,7 @@ void loop() {
 
   struct can_frame canMsg;
   unsigned long endTime = millis() + 1000;
+  
   while(file.available()) {
     if (file.readBytes((char*)&canMsg.can_id,4) != 4) {
       Serial.println("Error while reading can_id from file.");
@@ -254,25 +258,54 @@ void loop() {
     }
 
     int encValue = (int)encoder.getCount();
-    if (millis() >= endTime || (encValue != prevEncoder)) {
+      if (encValue != prevEncoder) {
+        prevEncoder = encValue;
+        lastUserInteraction = millis();
+        screenSaveActive = false;
+      }
+
+    if (millis() >= endTime) {
       display.clearDisplay();
-      display.setCursor(0, 0);
-      display.print("Bus 0: ");
-      display.print(displayCount[0]);
-      display.println(" msgs/sec");
-      display.print("Bus 1: ");
-      display.print(displayCount[1]);
-      display.println(" msgs/sec");
-      display.print("Bus 2: ");
-      display.print(displayCount[2]);
-      display.println(" msgs/sec");
-      display.display();
-      display.print("Encoder: ");
-      display.print(encValue);
-      display.println("");
-      display.display();
-      prevEncoder = encValue;
+      if (millis() < lastUserInteraction + 5000) {
+        display.setCursor(0, 0);
+        display.print("Bus 0: ");
+        display.print(displayCount[0]);
+        display.println(" msgs/sec");
+        display.print("Bus 1: ");
+        display.print(displayCount[1]);
+        display.println(" msgs/sec");
+        display.print("Bus 2: ");
+        display.print(displayCount[2]);
+        display.println(" msgs/sec");
+        display.display();
+        display.print("Encoder: ");
+        display.print(encValue);
+        display.println("");      
+        display.print("12v: ");
+        display.println(digitalRead(26) ? "ON" : "OFF");         
+        display.display();
+      }  else {
+        if (screenSaveActive == false) {
+          screenSaveActive = true;
+          display.clearDisplay();
+          display.display();
+        }
+      } 
     }
+
+    // if (screenSaveActive == true) {
+    //     display.writePixel(x,y,SSD1306_BLACK);
+    //     if (x + dx > 128 || x + dx < 0) {
+    //       dx = dx * -1;
+    //     }
+    //     if (y + dy > 64 || y + dy < 0) {
+    //       dy = dy * -1;
+    //     }        
+    //     x += dx;
+    //     y += dy;
+    //     display.writePixel(x,y,SSD1306_WHITE);      
+    //     display.display(); 
+    // }
 
     // Update display count and reset counter
     if (millis() >= endTime) {
@@ -297,6 +330,7 @@ void loop() {
       }
 
       delay(1000);
+      lastUserInteraction = millis();
     }
   } 
 
